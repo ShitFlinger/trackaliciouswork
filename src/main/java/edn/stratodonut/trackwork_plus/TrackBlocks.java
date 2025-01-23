@@ -124,6 +124,18 @@ public class TrackBlocks {
                     .transform(customItemModel())
                     .register();
 
+    public static final BlockEntry<WheelBlock> LARGE_WHEEL =
+            REGISTRATE.block("large_wheel", WheelBlock::new)
+                    .initialProperties(() -> Blocks.RAIL)
+                    .properties(p -> p.noOcclusion().mapColor(MapColor.PODZOL).noCollission().strength(7.0f).sound(SoundType.METAL))
+                    .transform(BlockStressDefaults.setNoImpact())
+                    .transform(pickaxeOnly())
+                    .blockstate(BlockStateGen.horizontalBlockProvider(true))
+//                    .onRegister(CreateRegistrate.blockModel(() -> BracketedKineticBlockModel::new))
+                    .item()
+                    .transform(customItemModel())
+                    .register();
+
     public static final BlockEntry<? extends RotatedPillarBlock> SIMPLE_WHEEL_PART =
             REGISTRATE.block("simple_wheel_part", (properties) -> new RotatedPillarBlock(properties) {
                         @Override

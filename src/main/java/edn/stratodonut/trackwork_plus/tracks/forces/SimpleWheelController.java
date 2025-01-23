@@ -185,7 +185,7 @@ public class SimpleWheelController implements ShipForcesInducer {
     }
 
     public final float setDamperCoefficient(float delta) {
-        this.suspensionStiffness = Math.clamp(1.0f, 4.0f, this.suspensionStiffness + delta);
+        this.suspensionStiffness = Math.clamp(1.0f, 12.0f, this.suspensionStiffness + delta);
         return this.suspensionStiffness;
     }
 

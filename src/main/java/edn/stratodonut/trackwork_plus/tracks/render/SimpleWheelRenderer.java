@@ -82,7 +82,7 @@ public class SimpleWheelRenderer extends KineticBlockEntityRenderer<WheelBlockEn
         double diagonalRibOffset = -Math.atan(springBaseLength);
         double diagonalSpringOffset = (Math.PI/2 - Math.abs(diagonalRibOffset));
 
-        double ribAngle = Math.atan((wheelTravel + 0.3f) / 1.1);
+        double ribAngle = Math.atan((wheelTravel + 0.9f) / 1.1);
         double scaleLength = Math.sqrt(springEndPointLength*springEndPointLength + diagonalLength*diagonalLength
                 - 2*springEndPointLength*diagonalLength*Math.cos(Math.PI/2 + ribAngle - diagonalRibOffset));
 

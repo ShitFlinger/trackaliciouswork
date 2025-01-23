@@ -77,6 +77,13 @@ public class WheelBlockEntity extends KineticBlockEntity {
         this.setLazyTickRate(10);
     }
 
+    public WheelBlockEntity large(BlockEntityType<?> type, BlockPos pos, BlockState state) {
+        WheelBlockEntity be = new WheelBlockEntity(type, pos, state);
+        this.wheelRadius = 1.0f;
+        this.suspensionTravel = 1.5f;
+        return be;
+    }
+
     @Override
     public void remove() {
         super.remove();
