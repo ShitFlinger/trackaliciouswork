@@ -71,7 +71,7 @@ public class WheelBlockEntity extends KineticBlockEntity {
 
     public WheelBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
-        this.wheelRadius = 0.75f;
+        this.wheelRadius = 0.625f;
         this.suspensionTravel = 1.5f;
         this.ship = () -> VSGameUtilsKt.getShipObjectManagingPos(this.level, pos);
         this.setLazyTickRate(10);
@@ -142,7 +142,7 @@ public class WheelBlockEntity extends KineticBlockEntity {
         } else {
             isFreespin = true;
             if (this.level.isClientSide) {
-                this.prevFreeWheelAngle += this.getWheelSpeed() * 3f / 10;
+                this.prevFreeWheelAngle += this.getWheelSpeed() * 5f / 10;
             }
         }
 
