@@ -1,0 +1,37 @@
+{
+  "suspension_creak": {
+    "subtitle": "subtitle.trackwork_plus.suspension_creak",
+    "sounds" : [
+      {
+        "name": "trackwork_plus:suspension_creak",
+        "type": "file"
+      }
+    ]
+  },
+  "power_wrench": {
+    "subtitle": "subtitle.trackwork_plus.power_wrench",
+    "sounds" : [
+      {
+        "name": "trackwork_plus:power_wrench_1",
+        "type": "file"
+      },
+      {
+        "name": "trackwork_plus:power_wrench_2",
+        "type": "file"
+      },
+      {
+        "name": "trackwork_plus:power_wrench_3",
+        "type": "file"
+      }
+    ]
+  },
+  "spring_tool": {
+    "subtitle": "subtitle.trackwork_plus.spring_tool",
+    "sounds" : [
+      {
+        "name": "minecraft:block.wooden_trapdoor.open",
+        "type": "event"
+      }
+    ]
+  }
+}

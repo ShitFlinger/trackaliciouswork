@@ -1,0 +1,36 @@
+{
+  "block.trackwork_plus.suspension_track": "Suspension Track",
+  "block.trackwork_plus.med_suspension_track": "Medium Suspension Track",
+  "block.trackwork_plus.large_suspension_track" : "Large Suspension Track",
+  "block.trackwork_plus.phys_track" : "Sprocket Track",
+  "block.trackwork_plus.med_phys_track" : "Medium  Sprocket Track",
+  "block.trackwork_plus.large_phys_track" : "Large Sprocket Track",
+  "block.trackwork_plus.track_level_controller" : "Suspension Controller",
+  "block.trackwork_plus.simple_wheel": "Simple Wheel",
+  "block.trackwork_plus.simple_wheel_part": "Simple Wheel Part",
+
+  "itemGroup.trackwork_plus": "trackwork_plus",
+  "item.trackwork_plus.track_tool_kit" : "Track Toolkit",
+  "item.trackwork_plus.track_tool_kit.tooltip.behaviour1" : "Makes the track suspension _less bouncy_, but could do worse on rough terrain! _Sneak_ to make it less stiff.",
+  "item.trackwork_plus.track_tool_kit.tooltip.behaviour2" : "_Move wheels_ back and forth depending on where you click.",
+  "item.trackwork_plus.track_tool_kit.tooltip.condition1" : "When the stiffness gauge is used,",
+  "item.trackwork_plus.track_tool_kit.tooltip.condition2" : "When the power wrench is used,",
+  "item.trackwork_plus.track_tool_kit.tooltip.summary" : "Multiple tools for working with tracks, packed into one convenient kit!",
+
+  "death.attack.trackwork_plus.run_over" : "%1$s became roadkill",
+  "death.attack.trackwork_plus.run_over.player" : "%1$s was thrown under the bus by %2$s",
+
+  "trackwork_plus.ponder.tracks.header" : "Building Tracks 101",
+  "trackwork_plus.ponder.tracks.text_1" : "Disclaimer: Tracks only work on assembled VS2 ships!",
+  "trackwork_plus.ponder.tracks.text_2" : "Just like chaindrive blocks, ",
+  "trackwork_plus.ponder.tracks.text_3" : "tracks are built in a row.",
+  "trackwork_plus.ponder.tracks.text_4" : "Tracks are powered via connected sprockets.",
+
+  "trackwork_plus.ponder.wheels.header" : "Building Wheels 101",
+  "trackwork_plus.ponder.wheels.text_1" : "Disclaimer: Wheels only work on assembled VS2 ships!",
+  "trackwork_plus.ponder.wheels.text_2" : "FUCK YOU I FUCKING HATE YOU FUCK YOU",
+  "trackwork_plus.ponder.wheels.text_3" : "Drive the wheels via the inner side,",
+  "trackwork_plus.ponder.wheels.text_4" : "Or don't connect them, which lets the wheel spin freely.",
+  "trackwork_plus.ponder.wheels.text_5" : "Power a wheel with redstone to steer it,",
+  "trackwork_plus.ponder.wheels.text_6" : "and the opposite side will automatically follow."
+}
