@@ -1,5 +1,6 @@
 package edn.stratodonut.trackwork.tracks.forces;
 
+import edn.stratodonut.trackwork.TrackworkMod;
 import edn.stratodonut.trackwork.tracks.data.PhysEntityTrackData;
 import com.fasterxml.jackson.annotation.JsonAutoDetect;
 import com.fasterxml.jackson.annotation.JsonIgnore;
@@ -61,7 +62,8 @@ public class PhysEntityTrackController implements ShipForcesInducer {
     public void applyForcesAndLookupPhysShips(@NotNull PhysShip physShip, @NotNull Function1<? super Long, ? extends PhysShip> lookupPhysShip) {
         while (!this.createdTrackData.isEmpty()) {
             Pair<Integer, PhysEntityTrackData.CreateData> createData = this.createdTrackData.remove();
-            this.trackData.put(createData.getFirst(), PhysEntityTrackData.from(createData.getSecond()));
+            if (createData.getFirst() != null && createData.getSecond() != null) this.trackData.put(createData.getFirst(), PhysEntityTrackData.from(createData.getSecond()));
+            else TrackworkMod.warn("Tried to create a PE track of ID {} with no data!", createData.getFirst());
         }
 
         this.trackUpdateData.forEach((id, data) -> {
@@ -151,7 +153,11 @@ public class PhysEntityTrackController implements ShipForcesInducer {
         } else if (!(other instanceof PhysEntityTrackController otherController)) {
             return false;
         } else {
-            return Objects.equals(this.trackData, otherController.trackData) && Objects.equals(this.trackUpdateData, otherController.trackUpdateData) && areQueuesEqual(this.createdTrackData, otherController.createdTrackData) && areQueuesEqual(this.removedTracks, otherController.removedTracks) && this.nextBearingID == otherController.nextBearingID;
+            return Objects.equals(this.trackData, otherController.trackData) &&
+                    Objects.equals(this.trackUpdateData, otherController.trackUpdateData) &&
+                    areQueuesEqual(this.createdTrackData, otherController.createdTrackData) &&
+                    areQueuesEqual(this.removedTracks, otherController.removedTracks) &&
+                    this.nextBearingID == otherController.nextBearingID;
         }
     }
 }

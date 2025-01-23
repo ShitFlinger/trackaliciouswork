@@ -1,6 +1,8 @@
 package edn.stratodonut.trackwork.tracks.blocks;
 
+import com.simibubi.create.foundation.damageTypes.CreateDamageSources;
 import com.simibubi.create.infrastructure.config.AllConfigs;
+import edn.stratodonut.trackwork.TrackDamageSources;
 import edn.stratodonut.trackwork.TrackPackets;
 import edn.stratodonut.trackwork.TrackworkConfigs;
 import edn.stratodonut.trackwork.ducks.MSGPLIDuck;
@@ -64,7 +66,6 @@ public class SuspensionTrackBlockEntity extends TrackBaseBlockEntity implements 
         this.wheelRadius = 0.5f;
         this.suspensionTravel = 1.5f;
         this.ship = () -> VSGameUtilsKt.getShipObjectManagingPos(this.level, pos);
-        setLazyTickRate(40);
     }
 
     public static SuspensionTrackBlockEntity large(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -134,7 +135,7 @@ public class SuspensionTrackBlockEntity extends TrackBaseBlockEntity implements 
         if (this.level.isClientSide && this.ship.get() != null && Math.abs(this.getSpeed()) > 64) {
             Vector3d pos = toJOML(Vec3.atBottomCenterOf(this.getBlockPos()));
             Vector3dc ground = VSGameUtilsKt.getWorldCoordinates(this.level, this.getBlockPos(), pos.sub(UP.mul(this.wheelTravel * 1.2, new Vector3d())));
-            BlockPos blockpos = new BlockPos(toMinecraft(ground));
+            BlockPos blockpos = BlockPos.containing(toMinecraft(ground));
             BlockState blockstate = this.level.getBlockState(blockpos);
             // Is this safe without calling BlockState::addRunningEffects?
             if (blockstate.getRenderShape() != RenderShape.INVISIBLE) {
@@ -175,7 +176,7 @@ public class SuspensionTrackBlockEntity extends TrackBaseBlockEntity implements 
 
                 forceVec = clipResult.trackTangent.mul(this.wheelRadius / 0.5, new Vector3d());
                 if (forceVec.lengthSquared() == 0) {
-                    BlockState b = this.level.getBlockState(new BlockPos(worldSpaceStart));
+                    BlockState b = this.level.getBlockState(BlockPos.containing(worldSpaceStart));
                     if (b.getFluidState().is(FluidTags.WATER)) {
                         forceVec = ship.getTransform().getShipToWorldRotation().transform(getActionVec3d(axis, 1)).mul(this.wheelRadius / 0.5).mul(0.2);
                     }
@@ -196,9 +197,10 @@ public class SuspensionTrackBlockEntity extends TrackBaseBlockEntity implements 
                         trackRPM
                 );
                 this.suspensionScale = controller.updateTrackBlock(this.trackID, data);
+                float wheelTravelDelta = (float) Math.abs(this.wheelTravel - (suspensionTravel + restOffset));
                 this.prevWheelTravel = this.wheelTravel;
                 this.wheelTravel = (float) (suspensionTravel + restOffset);
-                TrackPackets.getChannel().send(packetTarget(), new SuspensionWheelPacket(this.getBlockPos(), this.wheelTravel));
+                if (wheelTravelDelta > 0.01f) TrackPackets.getChannel().send(packetTarget(), new SuspensionWheelPacket(this.getBlockPos(), this.wheelTravel));
 
                 // Entity Damage
                 // TODO: Players don't get pushed, why?
@@ -215,10 +217,16 @@ public class SuspensionTrackBlockEntity extends TrackBaseBlockEntity implements 
                     }
                     Vec3 relPos = e.position().subtract(worldPos);
                     float speed = Math.abs(this.getSpeed());
-                    if (speed > 1) e.hurt(SuspensionTrackBlock.damageSourceTrack, (speed / 8f) * AllConfigs.server().kinetics.crushingDamage.get());
+                    if (speed > 1) e.hurt(TrackDamageSources.runOver(this.level), (speed / 8f) * AllConfigs.server().kinetics.crushingDamage.get());
                 }
             }
         }
+    }
+
+    @Override
+    public void lazyTick() {
+        super.lazyTick();
+        if (this.assembled && !this.level.isClientSide && this.ship.get() != null) TrackPackets.getChannel().send(packetTarget(), new SuspensionWheelPacket(this.getBlockPos(), this.wheelTravel));
     }
 
     public record ClipResult(Vector3dc trackTangent, Vec3 suspensionLength, @Nullable Long groundShipId) { ; }

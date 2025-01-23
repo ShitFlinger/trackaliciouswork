@@ -65,7 +65,6 @@ public class PhysEntityTrackBlockEntity extends TrackBaseBlockEntity implements 
         this.wheelRadius = 0.5f;
         this.ship = () -> VSGameUtilsKt.getShipObjectManagingPos(this.level, pos);
         this.wheel = new WeakReference<>(null);
-        setLazyTickRate(40);
     }
 
     public static PhysEntityTrackBlockEntity large(BlockEntityType<?> type, BlockPos pos, BlockState state) {
@@ -225,7 +224,6 @@ public class PhysEntityTrackBlockEntity extends TrackBaseBlockEntity implements 
         }
 
         if (this.level == null) {
-            TrackworkMod.warn("Level is null????");
             return;
         }
         if (this.assembled && !this.level.isClientSide) {
@@ -244,8 +242,7 @@ public class PhysEntityTrackBlockEntity extends TrackBaseBlockEntity implements 
                     };
                 }
                 if (wheel == null) {
-                    // TODO: Figure out why this is happening
-                    TrackworkMod.warn("Wheel is NULL after assembly! At %s", this.getBlockPos().toString());
+                    TrackworkMod.warn("Wheel is NULL after assembly! At {}", this.getBlockPos().toString());
                     return;
                 }
                 wheel.keepAlive();

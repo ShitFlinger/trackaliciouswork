@@ -2,7 +2,9 @@ package edn.stratodonut.trackwork.tracks.blocks;
 
 import com.simibubi.create.content.kinetics.base.KineticBlock;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
+import com.simibubi.create.foundation.damageTypes.CreateDamageSources;
 import com.simibubi.create.infrastructure.config.AllConfigs;
+import edn.stratodonut.trackwork.TrackDamageSources;
 import edn.stratodonut.trackwork.TrackPackets;
 import edn.stratodonut.trackwork.TrackworkConfigs;
 import edn.stratodonut.trackwork.TrackworkUtil;
@@ -69,10 +71,10 @@ public class WheelBlockEntity extends KineticBlockEntity {
 
     public WheelBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
-        this.wheelRadius = 1.0f;
+        this.wheelRadius = 0.75f;
         this.suspensionTravel = 1.5f;
         this.ship = () -> VSGameUtilsKt.getShipObjectManagingPos(this.level, pos);
-        setLazyTickRate(40);
+        this.setLazyTickRate(10);
     }
 
     @Override
@@ -116,7 +118,7 @@ public class WheelBlockEntity extends KineticBlockEntity {
         if (this.level.isClientSide && this.ship.get() != null && Math.abs(this.getSpeed()) > 64) {
             Vector3d pos = toJOML(Vec3.atBottomCenterOf(this.getBlockPos()));
             Vector3dc ground = VSGameUtilsKt.getWorldCoordinates(this.level, this.getBlockPos(), pos.sub(UP.mul(this.wheelTravel * 1.2, new Vector3d())));
-            BlockPos blockpos = new BlockPos(toMinecraft(ground));
+            BlockPos blockpos = BlockPos.containing(toMinecraft(ground));
             BlockState blockstate = this.level.getBlockState(blockpos);
             // Is this safe without calling BlockState::addRunningEffects?
             if (blockstate.getRenderShape() != RenderShape.INVISIBLE) {
@@ -158,9 +160,10 @@ public class WheelBlockEntity extends KineticBlockEntity {
 
 //                 Steering Control
                 int bestSignal = this.level.getBestNeighborSignal(this.getBlockPos());
+                float oldSteeringValue = this.steeringValue;
                 this.steeringValue = bestSignal / 15f * ((dir.getAxisDirection() == Direction.AxisDirection.POSITIVE ? 1 : -1));
-
-                this.onLinkedWheel(wbe -> wbe.linkedSteeringValue = this.steeringValue);
+                float deltaSteeringValue = oldSteeringValue - this.steeringValue;
+                this.onLinkedWheel(wbe -> wbe.setLinkedSteeringValue(this.steeringValue));
 
                 Vector3dc worldSpaceForward = ship.getTransform().getShipToWorldRotation().transform(getActionVec3d(axis, 1), new Vector3d());
                 float horizontalOffset = this.getPointHorizontalOffset();
@@ -176,12 +179,12 @@ public class WheelBlockEntity extends KineticBlockEntity {
                 ClipResult clipResult = clipAndResolve(ship, axis, worldSpaceStart.add(worldSpaceHorizontalOffset).add(worldSpaceFutureOffset), worldSpaceNormal);
 
                 forceVec = clipResult.trackTangent.mul(this.wheelRadius / 0.5, new Vector3d());
-                if (forceVec.lengthSquared() == 0) {
-                    BlockState b = this.level.getBlockState(new BlockPos(worldSpaceStart));
-                    if (b.getFluidState().is(FluidTags.WATER)) {
-                        forceVec = ship.getTransform().getShipToWorldRotation().transform(getActionVec3d(axis, 1)).mul(this.wheelRadius / 0.5).mul(0.2);
-                    }
-                }
+//                if (forceVec.lengthSquared() == 0) {
+//                    BlockState b = this.level.getBlockState(BlockPos.containing(worldSpaceStart));
+//                    if (b.getFluidState().is(FluidTags.WATER)) {
+//                        forceVec = ship.getTransform().getShipToWorldRotation().transform(getActionVec3d(axis, 1)).mul(this.wheelRadius / 0.5).mul(0.2);
+//                    }
+//                }
 
                 double suspensionTravel = clipResult.suspensionLength.lengthSqr() == 0 ? susScaled : clipResult.suspensionLength.length() - 0.5;
                 Vector3dc suspensionForce = toJOML(worldSpaceNormal.scale( (susScaled - suspensionTravel))).negate();
@@ -206,7 +209,7 @@ public class WheelBlockEntity extends KineticBlockEntity {
 
                 this.prevWheelTravel = this.wheelTravel;
                 this.wheelTravel = newWheelTravel;
-                TrackPackets.getChannel().send(packetTarget(), new SimpleWheelPacket(this.getBlockPos(), this.wheelTravel, this.getSteeringValue(), this.horizontalOffset));
+                if (Math.abs(delta) > 0.01f || Math.abs(deltaSteeringValue) > 0.05f) this.syncToClient();
 
                 // Entity Damage
                 // TODO: Players don't get pushed, why?
@@ -223,10 +226,16 @@ public class WheelBlockEntity extends KineticBlockEntity {
                     }
                     Vec3 relPos = e.position().subtract(worldPos);
                     float speed = Math.abs(this.getSpeed());
-                    if (speed > 1) e.hurt(SuspensionTrackBlock.damageSourceTrack, (speed / 16f) * AllConfigs.server().kinetics.crushingDamage.get());
+                    if (speed > 1) e.hurt(TrackDamageSources.runOver(this.level), (speed / 16f) * AllConfigs.server().kinetics.crushingDamage.get());
                 }
             }
         }
+    }
+
+    @Override
+    public void lazyTick() {
+        super.lazyTick();
+        if (this.assembled && !this.level.isClientSide && this.ship.get() != null) this.syncToClient();
     }
 
     public record ClipResult(Vector3dc trackTangent, Vec3 suspensionLength, @Nullable Long groundShipId) { ; }
@@ -262,7 +271,7 @@ public class WheelBlockEntity extends KineticBlockEntity {
 
     protected void onLinkedWheel(Consumer<WheelBlockEntity> action) {
         Direction dir = this.getBlockState().getValue(HORIZONTAL_FACING);
-        for (int i = 1; i <= 6; i++) {
+        for (int i = 1; i <= TrackworkConfigs.server().wheelPairDist.get() + 1; i++) {
             BlockPos bpos = this.getBlockPos().relative(dir, i);
             BlockEntity be = this.level.getBlockEntity(bpos);
             if (be instanceof WheelBlockEntity wbe) {
@@ -270,6 +279,18 @@ public class WheelBlockEntity extends KineticBlockEntity {
                 break;
             }
         }
+    }
+
+    public void setLinkedSteeringValue(float v) {
+        float old = this.getSteeringValue();
+        this.linkedSteeringValue = v;
+        float delta = this.getSteeringValue() - old;
+        if (Math.abs(delta) > 0.05f) this.syncToClient();
+    }
+
+    protected void syncToClient() {
+        if (!this.level.isClientSide) TrackPackets.getChannel().send(packetTarget(),
+                new SimpleWheelPacket(this.getBlockPos(), this.wheelTravel, this.getSteeringValue(), this.horizontalOffset));
     }
 
     protected static Vec3 getActionNormal(Direction.Axis axis) {
@@ -305,7 +326,7 @@ public class WheelBlockEntity extends KineticBlockEntity {
     }
 
     public float getFreeWheelAngle(float partialTick) {
-        return (this.prevFreeWheelAngle + this.getWheelSpeed()*partialTick* 3f/10) % 360;
+        return (this.prevFreeWheelAngle + this.getWheelSpeed()*partialTick* 6f/10) % 360;
     }
 
     // To future dev, this does not take wheel radius into account
@@ -351,6 +372,9 @@ public class WheelBlockEntity extends KineticBlockEntity {
         return Mth.lerp(partialTicks, prevWheelTravel, wheelTravel);
     }
 
+    /**
+    For ponder usage only!
+     **/
     public void setSteeringValue(float value) {
         this.steeringValue = value;
     }
@@ -363,7 +387,11 @@ public class WheelBlockEntity extends KineticBlockEntity {
         Direction.Axis axis = this.getBlockState().getValue(HORIZONTAL_FACING).getAxis();
         double factor = offset.dot(getActionVec3d(axis, 1));
         this.horizontalOffset = Math.clamp(-0.4f, 0.4f, Math.round(factor * 8.0f) / 8.0f);
-        this.onLinkedWheel(wbe -> wbe.horizontalOffset = this.horizontalOffset);
+        this.onLinkedWheel(wbe -> {
+            wbe.horizontalOffset = this.horizontalOffset;
+            wbe.syncToClient();
+        });
+        this.syncToClient();
     }
 
     public float getPointHorizontalOffset() {
