@@ -112,7 +112,7 @@ public class TrackBlocks {
     public static final BlockEntry<WheelBlock> SIMPLE_WHEEL =
             REGISTRATE.block("simple_wheel", WheelBlock::new)
                     .initialProperties(() -> Blocks.RAIL)
-                    .properties(p -> p.noOcclusion().mapColor(MapColor.PODZOL).noCollission().strength(7.0f).sound(SoundType.METAL))
+                    .properties(p -> p.noOcclusion().mapColor(MapColor.PODZOL).noCollission().strength(7.0f).sound(SoundType.COPPER))
                     .transform(BlockStressDefaults.setNoImpact())
                     .transform(pickaxeOnly())
                     .blockstate(BlockStateGen.horizontalBlockProvider(true))
@@ -124,7 +124,7 @@ public class TrackBlocks {
     public static final BlockEntry<LargeSimpleWheelBlock> LARGE_WHEEL =
             REGISTRATE.block("large_wheel", LargeSimpleWheelBlock::new)
                     .initialProperties(() -> Blocks.RAIL)
-                    .properties(p -> p.noOcclusion().mapColor(MapColor.PODZOL).noCollission().strength(7.0f).sound(SoundType.METAL))
+                    .properties(p -> p.noOcclusion().mapColor(MapColor.PODZOL).noCollission().strength(7.0f).sound(SoundType.COPPER))
                     .transform(BlockStressDefaults.setNoImpact())
                     .transform(pickaxeOnly())
                     .blockstate(BlockStateGen.horizontalBlockProvider(true))
@@ -141,7 +141,20 @@ public class TrackBlocks {
                         }
                     })
                     .initialProperties(() -> Blocks.WHITE_WOOL)
-                    .properties(p -> p.noOcclusion().mapColor(MapColor.PODZOL).strength(2.0f, 7.0f).sound(SoundType.WOOL))
+                    .properties(p -> p.noOcclusion().mapColor(MapColor.PODZOL).strength(2.0f, 7.0f).sound(SoundType.COPPER))
+                    .item()
+                    .transform(customItemModel())
+                    .register();
+
+    public static final BlockEntry<? extends RotatedPillarBlock> LARGE_SIMPLE_WHEEL_PART =
+            REGISTRATE.block("large_simple_wheel_part", (properties) -> new RotatedPillarBlock(properties) {
+                        @Override
+                        public @NotNull VoxelShape getCollisionShape(BlockState state, BlockGetter worldIn, BlockPos pos, CollisionContext context) {
+                            return AllShapes.CRUSHING_WHEEL_COLLISION_SHAPE;
+                        }
+                    })
+                    .initialProperties(() -> Blocks.WHITE_WOOL)
+                    .properties(p -> p.noOcclusion().mapColor(MapColor.PODZOL).strength(2.0f, 7.0f).sound(SoundType.COPPER))
                     .item()
                     .transform(customItemModel())
                     .register();

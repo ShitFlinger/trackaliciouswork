@@ -73,7 +73,7 @@ public class WheelBlockEntity extends KineticBlockEntity {
     public WheelBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
         this.wheelRadius = 0.625f;
-        this.suspensionTravel = 1.5f;
+        this.suspensionTravel = 1f;
         this.ship = () -> VSGameUtilsKt.getShipObjectManagingPos(this.level, pos);
         this.setLazyTickRate(10);
     }
@@ -114,7 +114,7 @@ public class WheelBlockEntity extends KineticBlockEntity {
     }
 
     public boolean isGrounded() {
-        
+
         //code ripped from the ground particle logic lolololol
 
         Vector3d pos = toJOML(Vec3.atBottomCenterOf(this.getBlockPos()));
@@ -166,18 +166,16 @@ public class WheelBlockEntity extends KineticBlockEntity {
         BlockState innerState = this.level.getBlockState(innerBlock);
 
 
-
-
-
-
-
         if (innerState.getBlock() instanceof KineticBlock ke && ke.hasShaftTowards(level, this.getBlockPos(), innerState, dir.getOpposite())) {
             isFreespin = false;
         } else {
             isFreespin = true;
             if (this.level.isClientSide && isGrounded()) {
-                //freespin speed (hi my name is kipti and i like sponge bob)
+                //freespin rotation logic (hi my name is kipti and i like sponge bob)
                 this.prevFreeWheelAngle += this.getWheelSpeed() * ((1/this.wheelRadius)*3)/10;
+                //replace with lerp to no rotation
+            } else {
+                this.prevFreeWheelAngle = 0;
             }
         }
 

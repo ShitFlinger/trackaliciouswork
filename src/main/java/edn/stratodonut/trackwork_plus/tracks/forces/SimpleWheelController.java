@@ -151,6 +151,8 @@ public class SimpleWheelController implements ShipForcesInducer {
             if (data.isWheelGrounded) {
                 if (data.isFreespin) {
                     slipVelocity = lateralSlip.normalize(Math.min(lateralSlip.length(), MAXIMUM_SLIP_LATERAL), new Vector3d());
+
+
                 } else {
                     slipVelocity = driveSlip.normalize(Math.min(driveSlip.length(), MAXIMUM_SLIP), new Vector3d())
                             .add(lateralSlip.normalize(Math.min(lateralSlip.length(), MAXIMUM_SLIP_LATERAL), new Vector3d()), new Vector3d());

@@ -1,0 +1,15 @@
+{
+  "variants": {
+    "axis=x": {
+      "model": "trackwork_plus:block/large_simple_wheel",
+      "y": 90
+    },
+    "axis=y": {
+      "model": "trackwork_plus:block/large_simple_wheel",
+      "x": 90
+    },
+    "axis=z": {
+      "model": "trackwork_plus:block/large_simple_wheel"
+    }
+  }
+}
