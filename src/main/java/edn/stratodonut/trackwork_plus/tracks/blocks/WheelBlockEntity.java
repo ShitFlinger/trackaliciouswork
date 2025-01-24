@@ -3,13 +3,13 @@ package edn.stratodonut.trackwork_plus.tracks.blocks;
 import com.simibubi.create.content.kinetics.base.KineticBlock;
 import com.simibubi.create.content.kinetics.base.KineticBlockEntity;
 import com.simibubi.create.foundation.damageTypes.CreateDamageSources;
+import edn.stratodonut.trackwork_plus.tracks.data.SimpleWheelData;
 import com.simibubi.create.infrastructure.config.AllConfigs;
 import edn.stratodonut.trackwork_plus.TrackDamageSources;
 import edn.stratodonut.trackwork_plus.TrackPackets;
 import edn.stratodonut.trackwork_plus.trackwork_plusConfigs;
 import edn.stratodonut.trackwork_plus.trackwork_plusUtil;
 import edn.stratodonut.trackwork_plus.ducks.MSGPLIDuck;
-import edn.stratodonut.trackwork_plus.tracks.data.SimpleWheelData;
 import edn.stratodonut.trackwork_plus.tracks.forces.SimpleWheelController;
 import edn.stratodonut.trackwork_plus.tracks.network.SimpleWheelPacket;
 import net.minecraft.core.BlockPos;
@@ -69,6 +69,7 @@ public class WheelBlockEntity extends KineticBlockEntity {
     public boolean assembled;
     public boolean assembleNextTick = true;
 
+
     public WheelBlockEntity(BlockEntityType<?> typeIn, BlockPos pos, BlockState state) {
         super(typeIn, pos, state);
         this.wheelRadius = 0.625f;
@@ -112,6 +113,24 @@ public class WheelBlockEntity extends KineticBlockEntity {
         }
     }
 
+    public boolean isGrounded() {
+        
+        //code ripped from the ground particle logic lolololol
+
+        Vector3d pos = toJOML(Vec3.atBottomCenterOf(this.getBlockPos()));
+
+        Vector3dc ground = VSGameUtilsKt.getWorldCoordinates(
+                this.level,
+                this.getBlockPos(),
+                pos.sub(UP.mul(this.wheelTravel * 1.2, new Vector3d()))
+        );
+
+        BlockPos blockpos = BlockPos.containing(toMinecraft(ground));
+
+        BlockState blockstate = this.level.getBlockState(blockpos);
+
+        return blockstate.getRenderShape() != RenderShape.INVISIBLE;
+    }
     @Override
     public void tick() {
         super.tick();
@@ -146,11 +165,17 @@ public class WheelBlockEntity extends KineticBlockEntity {
         BlockPos innerBlock = this.getBlockPos().relative(dir);
         BlockState innerState = this.level.getBlockState(innerBlock);
 
+
+
+
+
+
+
         if (innerState.getBlock() instanceof KineticBlock ke && ke.hasShaftTowards(level, this.getBlockPos(), innerState, dir.getOpposite())) {
             isFreespin = false;
         } else {
             isFreespin = true;
-            if (this.level.isClientSide) {
+            if (this.level.isClientSide && isGrounded()) {
                 //freespin speed (hi my name is kipti and i like sponge bob)
                 this.prevFreeWheelAngle += this.getWheelSpeed() * ((1/this.wheelRadius)*3)/10;
             }
