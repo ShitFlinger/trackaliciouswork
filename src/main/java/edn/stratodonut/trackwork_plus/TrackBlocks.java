@@ -11,10 +11,7 @@ import com.simibubi.create.content.kinetics.chainDrive.ChainDriveGenerator;
 import com.simibubi.create.content.kinetics.simpleRelays.BracketedKineticBlockModel;
 import com.simibubi.create.foundation.data.CreateRegistrate;
 import com.tterrag.registrate.util.entry.BlockEntry;
-import edn.stratodonut.trackwork_plus.tracks.blocks.variants.LargePhysEntityTrackBlock;
-import edn.stratodonut.trackwork_plus.tracks.blocks.variants.LargeSuspensionTrackBlock;
-import edn.stratodonut.trackwork_plus.tracks.blocks.variants.MedPhysEntityTrackBlock;
-import edn.stratodonut.trackwork_plus.tracks.blocks.variants.MedSuspensionTrackBlock;
+import edn.stratodonut.trackwork_plus.tracks.blocks.variants.*;
 import net.minecraft.core.BlockPos;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.block.Blocks;
@@ -124,8 +121,8 @@ public class TrackBlocks {
                     .transform(customItemModel())
                     .register();
 
-    public static final BlockEntry<WheelBlock> LARGE_WHEEL =
-            REGISTRATE.block("large_wheel", WheelBlock::new)
+    public static final BlockEntry<LargeSimpleWheelBlock> LARGE_WHEEL =
+            REGISTRATE.block("large_wheel", LargeSimpleWheelBlock::new)
                     .initialProperties(() -> Blocks.RAIL)
                     .properties(p -> p.noOcclusion().mapColor(MapColor.PODZOL).noCollission().strength(7.0f).sound(SoundType.METAL))
                     .transform(BlockStressDefaults.setNoImpact())

@@ -1,0 +1,19 @@
+{
+  "variants": {
+    "facing=north": {
+      "model": "trackwork_plus:block/empty",
+      "y": 180
+    },
+    "facing=south": {
+      "model": "trackwork_plus:block/empty"
+    },
+    "facing=west": {
+      "model": "trackwork_plus:block/empty",
+      "y": 90
+    },
+    "facing=east": {
+      "model": "trackwork_plus:block/empty",
+      "y": 270
+    }
+  }
+}

@@ -16,7 +16,8 @@ public class trackwork_plusPartialModels {
             SIMPLE_WHEEL_RIB = block("partial/simple_wheel_rib"),
             SIMPLE_WHEEL_RIB_UPPER = block("partial/simple_wheel_rib_upper"),
             SIMPLE_WHEEL_SPRING_BASE = block("partial/simple_wheel_spring_base"),
-            SIMPLE_WHEEL_SPRING_COIL = block("partial/simple_wheel_spring_coil");
+            SIMPLE_WHEEL_SPRING_COIL = block("partial/simple_wheel_spring_coil"),
+            LARGE_SIMPLE_WHEEL = block("large_simple_wheel");
 
     private static PartialModel block(String path) {
         return new PartialModel(trackwork_plusMod.getResource("block/" + path));

@@ -39,11 +39,6 @@ public class WheelEntity extends VSPhysicsEntity {
 
         if (this.level().isClientSide) return;
 
-        timeout++;
-
-        if (timeout > 60) {
-            this.kill();
-        }
     }
 
     public long getShipId() {
