@@ -145,12 +145,14 @@ public class WheelBlockEntity extends KineticBlockEntity {
         Direction dir = this.getBlockState().getValue(HORIZONTAL_FACING);
         BlockPos innerBlock = this.getBlockPos().relative(dir);
         BlockState innerState = this.level.getBlockState(innerBlock);
+
         if (innerState.getBlock() instanceof KineticBlock ke && ke.hasShaftTowards(level, this.getBlockPos(), innerState, dir.getOpposite())) {
             isFreespin = false;
         } else {
             isFreespin = true;
             if (this.level.isClientSide) {
-                this.prevFreeWheelAngle += this.getWheelSpeed() * 5f / 10;
+                //freespin speed (hi my name is kipti and i like sponge bob)
+                this.prevFreeWheelAngle += this.getWheelSpeed() * ((1/this.wheelRadius)*3)/10;
             }
         }
 
@@ -334,7 +336,7 @@ public class WheelBlockEntity extends KineticBlockEntity {
     }
 
     public float getFreeWheelAngle(float partialTick) {
-        return (this.prevFreeWheelAngle + this.getWheelSpeed()*partialTick* 6f/10) % 360;
+        return (this.prevFreeWheelAngle + this.getWheelSpeed()*partialTick* 3f/10) % 360;
     }
 
     // To future dev, this does not take wheel radius into account

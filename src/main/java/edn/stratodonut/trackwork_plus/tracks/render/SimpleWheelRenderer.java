@@ -110,7 +110,11 @@ public class SimpleWheelRenderer extends KineticBlockEntityRenderer<WheelBlockEn
         springCoil.renderInto(ms, buffer.getBuffer(RenderType.solid()));
 
         {
-            SuperByteBuffer wheels = CachedBufferer.partial(trackwork_plusPartialModels.SIMPLE_WHEEL, state);
+
+            SuperByteBuffer wheels = be.getWheelRadius() < 0.63f
+                    ? CachedBufferer.partial(trackwork_plusPartialModels.SIMPLE_WHEEL, state) :
+                    be.getWheelRadius() > 0.8f ? CachedBufferer.partial(trackwork_plusPartialModels.LARGE_SIMPLE_WHEEL, state) :
+                            CachedBufferer.partial(trackwork_plusPartialModels.MED_SUSPENSION_WHEEL, state);
             wheels.centre()
                     .rotateY(-yRot + be.getSteeringValue() * 30)
 //                    .translate(0, be.getWheelRadius() , 0)
