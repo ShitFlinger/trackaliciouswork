@@ -1,0 +1,189 @@
+{
+	"credit": "Made with Blockbench",
+	"parent": "block/block",
+	"texture_size": [64, 64],
+	"textures": {
+		"3": "trackwork:block/suspension"
+	},
+	"elements": [
+		{
+			"from": [5.5, 5, 12],
+			"to": [10.5, 15, 17],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 8.9625, 14.5]},
+			"faces": {
+				"north": {"uv": [12, 0, 15, 6], "texture": "#3"},
+				"east": {"uv": [12, 0, 15, 6], "texture": "#3"},
+				"south": {"uv": [12, 0, 15, 6], "texture": "#3"},
+				"west": {"uv": [12, 0, 15, 6], "texture": "#3"},
+				"up": {"uv": [15, 9.5, 12, 7], "texture": "#3"},
+				"down": {"uv": [15, 6, 12, 8.5], "texture": "#3"}
+			}
+		},
+		{
+			"from": [6, 5, 12.5],
+			"to": [10, 16, 16.5],
+			"rotation": {"angle": 0, "axis": "y", "origin": [8, 3.9625, 14.5]},
+			"faces": {
+				"north": {"uv": [9.5, 0, 11.5, 6], "texture": "#3"},
+				"east": {"uv": [9.5, 0, 11.5, 6], "texture": "#3"},
+				"south": {"uv": [9.5, 0, 11.5, 6], "texture": "#3"},
+				"west": {"uv": [9.5, 0, 11.5, 6], "texture": "#3"},
+				"up": {"uv": [0, 4, 2, 2], "texture": "#3"},
+				"down": {"uv": [2, 2, 0, 4], "texture": "#3"}
+			}
+		}
+	],
+	"display": {
+		"gui": {
+			"rotation": [30, 45, 0],
+			"scale": [0.625, 0.625, 0.625]
+		}
+	},
+	"groups": [
+		{
+			"name": "simple_wheel_concept",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "shaft",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": []
+				},
+				{
+					"name": "simple_wheel_spring_base",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "shaft",
+							"origin": [8, 8, 8],
+							"color": 0,
+							"children": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "simple_wheel_concept",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "shaft",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": []
+				},
+				{
+					"name": "simple_wheel_spring_base",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "shaft",
+							"origin": [8, 8, 8],
+							"color": 0,
+							"children": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "simple_wheel_concept",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "shaft",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": []
+				}
+			]
+		},
+		{
+			"name": "simple_wheel_concept",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "shaft",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": []
+				},
+				{
+					"name": "simple_wheel_spring_base",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "shaft",
+							"origin": [8, 8, 8],
+							"color": 0,
+							"children": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "simple_wheel_concept",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "shaft",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": []
+				},
+				{
+					"name": "simple_wheel_spring_base",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "shaft",
+							"origin": [8, 8, 8],
+							"color": 0,
+							"children": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "simple_wheel_concept",
+			"origin": [8, 8, 8],
+			"color": 0,
+			"children": [
+				{
+					"name": "shaft",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": []
+				},
+				0,
+				1,
+				{
+					"name": "simple_wheel_spring_base",
+					"origin": [8, 8, 8],
+					"color": 0,
+					"children": [
+						{
+							"name": "shaft",
+							"origin": [8, 8, 8],
+							"color": 0,
+							"children": []
+						}
+					]
+				}
+			]
+		}
+	]
+}

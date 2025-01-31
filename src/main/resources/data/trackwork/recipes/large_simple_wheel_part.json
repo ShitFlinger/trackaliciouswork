@@ -1,0 +1,28 @@
+{
+	"type": "create:mechanical_crafting",
+	"pattern": [
+		" BBB ",
+		"BAPA ",
+		"BPCP ",
+		"BAPA ",
+		" BBB "
+	],
+	"key": {
+		"A": {
+			"item": "create:andesite_alloy"
+		},
+		"P": {
+			"item": "minecraft:iron_ingot"
+		},
+		"C": {
+			"item": "create:cogwheel"
+		},
+		"B": {
+			"item": "create:belt_connector"
+		}
+	},
+	"result": {
+		"item": "trackwork:large_simple_wheel_part",
+		"count": 2
+	}
+}

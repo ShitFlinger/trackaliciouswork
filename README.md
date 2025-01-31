@@ -1,7 +1,9 @@
 
-Welcome to the uh, trackwork_plus repo
+HI HI HI IM KIPTI AND I FUCKED UP ENDALION'S MOD 
 
-I'm not gonna decorate this cause its not something you should be looking at often, if at all
+
 
 ## Credits
-Textures and models derived from [Create Mod](https://github.com/Creators-of-Create/Create)
+Trackwork by Endalion
+Textures and models by Kipti
+Color palettes derived from [Create Mod](https://github.com/Creators-of-Create/Create)
